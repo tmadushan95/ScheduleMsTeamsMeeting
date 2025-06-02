@@ -1,0 +1,20 @@
+# Ignore build outputs
+bin/
+obj/
+
+# Ignore user-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignore Rider/VSCode/JetBrains settings (optional)
+.idea/
+.vscode/
+
+# Ignore packages folder if using packages.config
+packages/
+
+# Ignore temporary files
+*.log
+*.tmp
