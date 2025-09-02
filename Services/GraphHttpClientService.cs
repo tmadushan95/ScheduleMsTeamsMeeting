@@ -1,12 +1,14 @@
-﻿namespace ScheduleMsTeamsMeeting.Services
+﻿using ScheduleMsTeamsMeeting.Services.Interfaces;
+
+namespace ScheduleMsTeamsMeeting.Services
 {
-    public static class GraphHttpClientService
+    public class GraphHttpClientService : IGraphHttpClientService
     {
         /// <summary>
         /// Creates and configures an HttpClient instance with the base address set to Microsoft Graph.
         /// </summary>
         /// <returns>A configured HttpClient instance.</returns>
-        public static HttpClient Create()
+        public HttpClient Create()
         {
             var client = new HttpClient
             {

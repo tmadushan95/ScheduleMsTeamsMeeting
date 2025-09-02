@@ -1,10 +1,26 @@
 ﻿
+using Microsoft.Extensions.DependencyInjection;
 using ScheduleMsTeamsMeeting.Extensions;
 using ScheduleMsTeamsMeeting.Models;
 using ScheduleMsTeamsMeeting.Models.Enums;
 using ScheduleMsTeamsMeeting.Services;
+using ScheduleMsTeamsMeeting.Services.Interfaces;
 
+#region Service Provider Configuration
+/// <summary>
+/// Registers application services and builds the service provider.
+/// </summary>
+var serviceProvider = new ServiceCollection()
+                .AddSingleton<IGraphHttpClientService, GraphHttpClientService>()
+                .AddScoped<IMsTeamsIntegrationService, MsTeamsIntegrationService>()
+                .BuildServiceProvider();
+#endregion
 
+#region Resolves required application services from the configured
+IMsTeamsIntegrationService _teamsIntegrationService = serviceProvider.GetRequiredService<IMsTeamsIntegrationService>();
+#endregion
+
+#region Create and Schedule Teams Meeting
 
 // Define the target time zone for the meeting (e.g., "Asia/Colombo")
 string timezone = "Asia/Colombo";
@@ -42,8 +58,8 @@ var meetingData = new MeetingRequest
 );
 
 // Create the meeting using the integration service
-MeetingResponse response = await new MsTeamsIntegrationService().ManageCalendarMeeting(meetingData);
+MeetingResponse response = await _teamsIntegrationService.ManageCalendarMeeting(meetingData);
 Console.WriteLine(response.MeetingId);
 
 // You can now use response.MeetingId, etc., to confirm or store the meeting details.
-
+#endregion

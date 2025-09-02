@@ -1,5 +1,6 @@
 ﻿using ScheduleMsTeamsMeeting.Models;
 using ScheduleMsTeamsMeeting.Models.Enums;
+using ScheduleMsTeamsMeeting.Services.Interfaces;
 using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
@@ -7,12 +8,12 @@ using System.Text.Json;
 
 namespace ScheduleMsTeamsMeeting.Services
 {
-    public class MsTeamsIntegrationService()
+    public class MsTeamsIntegrationService(IGraphHttpClientService httpClientService): IMsTeamsIntegrationService
     {
         /// <summary>
         /// An HttpClient instance configured for Microsoft Graph API requests.
         /// </summary>
-        private readonly HttpClient _httpClient = GraphHttpClientService.Create();
+        private readonly HttpClient _httpClient = httpClientService.Create();
 
         /// <summary>
         /// The access token used to authorize requests to Microsoft Graph API.
