@@ -37,25 +37,59 @@ DateTime endDateTime = DateTime.UtcNow.AddHours(2).ConvertDateToTimeZone(sourceT
 // Define participants for the meeting
 var meetingParticipants = new List<MeetingParticipant>
 {
-    new("Test User 1", "testUser1@example.com", EnumMeetingParticipationType.Required),
-    new("Test User 2", "testUser2@example.com", EnumMeetingParticipationType.Optional),
-    new("Test User 3", "testUser3@example.com", EnumMeetingParticipationType.Required)
+    new()
+    {
+        Name= "Test User 1",
+        EmailAddress="testUser1@example.com",
+        Type=EnumMeetingParticipationType.Required
+    },
+    new()
+    {
+        Name= "Test User 2",
+        EmailAddress="testUser2@example.com",
+        Type=EnumMeetingParticipationType.Optional
+    },
+    new()
+    {
+        Name= "Test User 3",
+        EmailAddress="testUser3@example.com",
+        Type=EnumMeetingParticipationType.Required
+    },
 };
+
+// Define recurrence pattern if the meeting is reccurring
+bool isReccurring = false;
+
+// Define recurrence details if the meeting is reccurring
+RecurrencePattern? reccurrence = isReccurring ? new()
+{
+    ReccurrenceStartDate = startDateTime,
+    ReccurrenceEndDate = endDateTime,
+    ReccurrencePatternType = EnumReccurrencePatternType.Daily,
+    RepeatingInterval = 1,
+    NumberOfOccurrences = 0,
+    ReccurrenceDaysOfWeek = new(),
+    ReccurrenceRangeType = EnumReccurrenceRangeType.EndDate,
+    RecureneceEditMode = EnumRecureneceEditMode.ThisOccurrence,
+    SelectedRecurrenceOption = EnumSelectedRecurrenceOption.None
+} : null;
 
 // NOTE: For updating or deleting a meeting, the MeetingId must be provided.
 // Use an empty string for creating a new meeting.
 var meetingData = new MeetingRequest
-(
-    string.Empty,                            // MeetingId (empty for new meeting)
-    "Test Ms Teams Meeting",                 // Subject
-    "Test Ms Teams Meeting description",     // Description
-    timezone,                                // TimeZone
-    EnumMeetingAction.CreateNewEvent,        // MeetingAction
-    startDateTime,                           // StartDateTime
-    endDateTime,                             // EndDateTime
-    true,                                    // IsOnlineMeeting
-    meetingParticipants                      // Participants
-);
+{
+    MeetingId = string.Empty,
+    Subject = "Test Ms Teams Meeting",
+    Description = "Test Ms Teams Meeting description",
+    TimeZone = timezone,
+    MeetingAction = EnumMeetingAction.CreateNewEvent,
+    StartDateTime = startDateTime,
+    EndDateTime = endDateTime,
+    IsOnlineMeeting = true,
+    MeetingParticipants = meetingParticipants,
+    IsReccurring = isReccurring,
+    Reccurrence = reccurrence
+};
 
 // Create the meeting using the integration service
 MeetingResponse response = await _teamsIntegrationService.ManageCalendarMeeting(meetingData);
